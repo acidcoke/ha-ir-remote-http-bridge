@@ -34,7 +34,8 @@ const TEXTS = {
     progress: "{n} of {total} keys learned",
     remote: "Remote",
     title: "Title (optional)",
-    max_width: "Maximum width in pixels",
+    max_height: "Maximum height in pixels",
+    max_width: "Maximum width in pixels (optional)",
     allow_learning: "Show learn mode button",
   },
   de: {
@@ -58,7 +59,8 @@ const TEXTS = {
     progress: "{n} von {total} Tasten gelernt",
     remote: "Fernbedienung",
     title: "Titel (optional)",
-    max_width: "Maximale Breite in Pixeln",
+    max_height: "Maximale Höhe in Pixeln",
+    max_width: "Maximale Breite in Pixeln (optional)",
     allow_learning: "Lernmodus-Schalter anzeigen",
   },
 };
@@ -159,12 +161,13 @@ class IrRemoteCard extends HTMLElement {
           ? []
           : [{ name: "entry_id", required: true, selector: { config_entry: { integration: DOMAIN } } }]),
         { name: "title", selector: { text: {} } },
+        { name: "max_height", selector: { number: { min: 200, max: 1600, step: 10, mode: "box" } } },
         { name: "max_width", selector: { number: { min: 120, max: 800, step: 10, mode: "box" } } },
         { name: "allow_learning", selector: { boolean: {} } },
       ],
       computeLabel: (schema, hass) => {
         const lang = TEXTS[(hass?.language || "en").split("-")[0]] || TEXTS.en;
-        return { entry_id: lang.remote, title: lang.title, max_width: lang.max_width,
+        return { entry_id: lang.remote, title: lang.title, max_height: lang.max_height, max_width: lang.max_width,
                  allow_learning: lang.allow_learning }[schema.name];
       },
     };
@@ -181,7 +184,7 @@ class IrRemoteCard extends HTMLElement {
 
   setConfig(config) {
     this._rawConfig = config;
-    this._config = { allow_learning: true, max_width: 280, ...config };
+    this._config = { allow_learning: true, max_height: 650, ...config };
     const slug = this.constructor.slug;
     if (slug) this._config.entry_id = REMOTES.get(slug)?.entry_id || "";
     if (this._loadedFor !== this._config.entry_id) {
@@ -434,7 +437,10 @@ class IrRemoteCard extends HTMLElement {
     holder.innerHTML = this._remote.svg;
     const svg = holder.querySelector("svg");
     if (svg) {
-      svg.style.maxWidth = `${Number(this._config.max_width) || 280}px`;
+      // The height is capped, not the width: remotes of the same length are
+      // then drawn equally long and at the same scale.
+      svg.style.maxHeight = `${Number(this._config.max_height) || 650}px`;
+      if (Number(this._config.max_width)) svg.style.maxWidth = `${Number(this._config.max_width)}px`;
       svg.querySelectorAll("script").forEach((el) => el.remove());
       svg.querySelectorAll("[data-button]").forEach((el) => {
         el.setAttribute("role", "button");

@@ -43,7 +43,8 @@ Nach dem Hinzufügen einer Fernbedienung die Seite einmal neu laden. Danach ersc
 ```yaml
 type: custom:ir-remote-card-monitor   # „monitor“ = Name der Fernbedienung als Slug
 title: Monitor                        # optional
-max_width: 280                        # optional, Breite der Zeichnung in px
+max_height: 650                       # optional, maximale Höhe der Zeichnung in px
+max_width: 300                        # optional, zusätzlich maximale Breite in px
 allow_learning: true                  # optional, false blendet den Lernmodus aus
 ```
 

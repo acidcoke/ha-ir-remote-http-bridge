@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 440" font-family="Arial, Helvetica, sans-serif" text-anchor="middle">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 420" font-family="Arial, Helvetica, sans-serif" text-anchor="middle">
   <defs>
     <linearGradient id="fr19-body" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#5b5e60"/>
@@ -8,8 +8,8 @@
   </defs>
 
   <!-- body -->
-  <rect x="4" y="4" width="202" height="432" rx="36" fill="#1d1d1f"/>
-  <rect x="9" y="9" width="192" height="422" rx="32" fill="url(#fr19-body)"/>
+  <rect x="4" y="4" width="202" height="412" rx="36" fill="#1d1d1f"/>
+  <rect x="9" y="9" width="192" height="402" rx="32" fill="url(#fr19-body)"/>
 
   <!-- DISPLAY pill -->
   <rect x="22" y="28" width="112" height="42" rx="21" fill="#8b8e90"/>
@@ -113,7 +113,4 @@
     <circle cx="166" cy="356" r="19" fill="#9a9da0"/>
     <text x="166" y="358.5" font-size="7" fill="#fff">PAIRING</text>
   </g>
-
-  <text x="105" y="398" font-size="6" fill="#e6e6e6" pointer-events="none">REMOTE CONTROLLER FR-19</text>
-  <text x="105" y="421" font-size="17" font-weight="bold" letter-spacing="1" fill="#fff" pointer-events="none">EIZO</text>
 </svg>
