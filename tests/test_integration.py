@@ -224,27 +224,76 @@ async def test_remove_entry(hass: HomeAssistant, hub):
     await hass.async_block_till_done()
 
 
+async def _setup_heater(hass: HomeAssistant) -> MockConfigEntry:
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {"url": URL}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {"definition": "fireplace_heater", "name": "Kamin"}
+    )
+    await hass.async_block_till_done()
+    return result["result"]
+
+
 async def test_switch(hass: HomeAssistant, hub):
+    entry = await _setup_heater(hass)
+    bridge = entry.runtime_data
+    # named like the remote, unavailable until the key is learned
+    assert hass.states.get("switch.kamin").state == "unavailable"
+    await bridge.async_learn("power")
+    await hass.async_block_till_done()
+    assert hass.states.get("switch.kamin").state == "off"
+    assert hass.states.get("switch.kamin_light").state == "unavailable"
+
+    for service, state in (("turn_on", "on"), ("turn_off", "off")):
+        hub.commands.clear()
+        await hass.services.async_call(
+            "switch", service, {"entity_id": "switch.kamin"}, blocking=True
+        )
+        assert hub.commands == [("42", "sendCode", bridge.code_name("power"))]
+        assert hass.states.get("switch.kamin").state == state
+
+
+async def test_media_player(hass: HomeAssistant, hub, entity_registry):
     entry = await _setup(hass)
     bridge = entry.runtime_data
-    # named like the remote, unavailable until both keys are learned
-    assert hass.states.get("switch.monitor").state == "unavailable"
-    await bridge.async_learn("power_on")
-    hub.code_on_learn = "T2Zm"
-    await bridge.async_learn("power_off")
+    assert hass.states.get("switch.monitor") is None
+    assert hass.states.get("media_player.monitor").state == "unavailable"
+    for index, button in enumerate(("power_on", "power_off", "up", "down")):
+        hub.code_on_learn = f"Q29kZQ{index}"
+        await bridge.async_learn(button)
     await hass.async_block_till_done()
-    assert hass.states.get("switch.monitor").state == "off"
+    state = hass.states.get("media_player.monitor")
+    assert state.state == "off"
+    assert state.attributes["supported_features"] == 128 | 256 | 1024
 
-    await hass.services.async_call(
-        "switch", "turn_on", {"entity_id": "switch.monitor"}, blocking=True
+    async def call(service):
+        await hass.services.async_call(
+            "media_player", service, {"entity_id": "media_player.monitor"}, blocking=True
+        )
+        return hub.commands[-1][2]
+
+    assert await call("turn_on") == bridge.code_name("power_on")
+    assert hass.states.get("media_player.monitor").state == "on"
+    assert await call("volume_up") == bridge.code_name("up")
+    assert await call("volume_down") == bridge.code_name("down")
+    assert await call("turn_off") == bridge.code_name("power_off")
+    assert hass.states.get("media_player.monitor").state == "off"
+
+    # entities that the definition no longer declares are removed on setup
+    entity_registry.async_get_or_create(
+        "switch", DOMAIN, f"{entry.entry_id}_switch_power", config_entry=entry
     )
-    assert hub.commands[-1] == ("42", "sendCode", bridge.code_name("power_on"))
-    assert hass.states.get("switch.monitor").state == "on"
-    await hass.services.async_call(
-        "switch", "turn_off", {"entity_id": "switch.monitor"}, blocking=True
+    await hass.config_entries.async_reload(entry.entry_id)
+    await hass.async_block_till_done()
+    assert not entity_registry.async_get_entity_id(
+        "switch", DOMAIN, f"{entry.entry_id}_switch_power"
     )
-    assert hub.commands[-1] == ("42", "sendCode", bridge.code_name("power_off"))
-    assert hass.states.get("switch.monitor").state == "off"
+    assert entity_registry.async_get("media_player.monitor")
+    assert entity_registry.async_get("button.monitor_menu")
 
 
 def test_switch_unknown_button(tmp_path):

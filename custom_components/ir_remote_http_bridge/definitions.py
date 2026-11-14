@@ -53,8 +53,25 @@ DEFINITION_SCHEMA = vol.Schema(
                 }
             )
         ],
+        # A media player entity so voice assistants understand "louder",
+        # "quieter", "mute" and on/off. All values are button ids.
+        vol.Optional("media_player"): vol.Schema(
+            {
+                vol.Optional("device_class", default="tv"): vol.In(
+                    ["tv", "speaker", "receiver"]
+                ),
+                vol.Optional("icon"): str,
+                vol.Optional("on"): _ID,
+                vol.Optional("off"): _ID,
+                vol.Optional("volume_up"): _ID,
+                vol.Optional("volume_down"): _ID,
+                vol.Optional("mute"): _ID,
+            }
+        ),
     }
 )
+
+MEDIA_PLAYER_BUTTON_KEYS = ("on", "off", "volume_up", "volume_down", "mute")
 
 
 @dataclass(frozen=True)
@@ -67,6 +84,7 @@ class RemoteDefinition:
     model: str | None
     buttons: tuple[dict[str, Any], ...]
     switches: tuple[dict[str, Any], ...]
+    media_player: dict[str, Any] | None
     svg: str
     builtin: bool
 
@@ -102,6 +120,17 @@ def _load_file(json_path: Path, builtin: bool) -> RemoteDefinition:
                     f"switch '{switch['id']}' refers to unknown button '{switch[key]}'"
                 )
 
+    media_player = data.get("media_player")
+    for key in MEDIA_PLAYER_BUTTON_KEYS:
+        if media_player and key in media_player and media_player[key] not in button_ids:
+            raise ValueError(
+                f"media_player refers to unknown button '{media_player[key]}'"
+            )
+    if media_player and ("on" in media_player) != ("off" in media_player):
+        raise ValueError("media_player needs both 'on' and 'off' or neither")
+    if media_player and ("volume_up" in media_player) != ("volume_down" in media_player):
+        raise ValueError("media_player needs both 'volume_up' and 'volume_down'")
+
     svg_path = (json_path.parent / data.get("svg", f"{json_path.stem}.svg")).resolve()
     if json_path.parent.resolve() not in svg_path.parents:
         raise ValueError("the SVG file must be in the same folder as the JSON file")
@@ -125,6 +154,7 @@ def _load_file(json_path: Path, builtin: bool) -> RemoteDefinition:
         model=data.get("model"),
         buttons=tuple(data["buttons"]),
         switches=tuple(data["switches"]),
+        media_player=media_player,
         svg=svg,
         builtin=builtin,
     )

@@ -9,7 +9,7 @@ angesprochen über die **Maker API**.
 - **Lernmodus** in der Karte: Taste antippen → der Blaster wartet auf das Signal der Originalfernbedienung →
   Home Assistant speichert den Code bei dieser Taste.
 - **Normalmodus**: Taste antippen → Code wird gesendet.
-- Zusätzlich gibt es pro Taste eine `button`-Entität und Ein/Aus-Schalter – für Automationen, Skripte und Alexa.
+- Zusätzlich gibt es pro Taste eine `button`-Entität sowie Mediaplayer bzw. Schalter – für Automationen, Skripte und Alexa.
 - Eigene Fernbedienungen lassen sich mit einer **SVG-Datei + JSON-Definition** hinzufügen.
 
 Mitgeliefert: **EIZO FR-19** und eine **Kamin-/Heizlüfter-Fernbedienung**.
@@ -58,23 +58,39 @@ Die Integration legt Entitäten an, die du wie alle anderen für Alexa freigibst
 (Home Assistant Cloud: Einstellungen → Sprachassistenten → Alexa → Entitäten freigeben; bei der manuellen
 Alexa-Skill-Einrichtung über `alexa: smart_home: filter:`). Danach in der Alexa-App „Geräte suchen“.
 
-- **Schalter** (`switch.<name>`): Ein/Aus der Fernbedienung, benannt wie die Fernbedienung selbst –
-  „Alexa, schalte *Monitor* ein“. Der Schalter ist verfügbar, sobald die zugehörigen Tasten gelernt sind.
+- **Mediaplayer** (`media_player.<name>`, z. B. beim EIZO FR-19): benannt wie die Fernbedienung –
+  „Alexa, schalte *Monitor* ein“, „Alexa, mach *Monitor* lauter / leiser“, „… um 3 lauter“.
+  Jeder Schritt sendet einmal die Lauter- bzw. Leiser-Taste.
+- **Schalter** (`switch.<name>`, z. B. beim Kamin): Ein/Aus – „Alexa, schalte *Kamin* ein“.
 - **Tasten** (`button.<name>_<taste>`): Jede Taste erscheint in Alexa als Szene –
   „Alexa, aktiviere *Monitor Menu*“. Für angenehmere Sprachbefehle der Entität in Home Assistant einen
-  Alias oder anderen Namen geben oder die Taste in einer Alexa-Routine verwenden.
+  anderen Namen geben oder die Taste in einer Alexa-Routine verwenden (z. B. Routine „Monitor heller“ →
+  Szene *Monitor Right*).
 
-Infrarot kennt keinen Rückkanal: Der Schalterzustand ist nur der zuletzt gesendete Befehl. Bei Fernbedienungen
+Die Entitäten sind verfügbar, sobald die zugehörigen Tasten gelernt sind.
+
+Infrarot kennt keinen Rückkanal: Der Ein/Aus-Zustand ist nur der zuletzt gesendete Befehl. Bei Fernbedienungen
 mit einer einzigen Power-Taste (Umschalter, z. B. der Kamin) sendet „ein“ und „aus“ dieselbe Taste – wurde das
 Gerät zwischendurch mit der Originalfernbedienung geschaltet, ist der Zustand vertauscht.
 
-Schalter werden in der JSON-Definition festgelegt (`on`/`off` sind Tasten-IDs, `name` ist optional):
+Beides wird in der JSON-Definition festgelegt; alle Werte sind Tasten-IDs:
 
 ```json
+"media_player": {
+  "device_class": "tv",
+  "on": "power_on",
+  "off": "power_off",
+  "volume_up": "up",
+  "volume_down": "down",
+  "mute": "mute"
+},
 "switches": [
-  { "id": "power", "on": "power_on", "off": "power_off" }
+  { "id": "light", "name": "Light", "on": "light", "off": "light" }
 ]
 ```
+
+`media_player`: `device_class` ist `tv`, `speaker` oder `receiver`; `on`/`off`, `volume_up`/`volume_down`
+und `mute` sind jeweils optional. `switches`: ohne `name` heißt der Schalter wie die Fernbedienung.
 
 ## Eigene Fernbedienungen
 

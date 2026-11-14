@@ -9,7 +9,7 @@ from homeassistant.components.http import StaticPathConfig
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryError
-from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers import config_validation as cv, entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.storage import Store
 from homeassistant.helpers.typing import ConfigType
@@ -64,6 +64,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: IrRemoteConfigEntry) -> 
     entry.runtime_data = bridge
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    # Drop entities the (possibly edited) definition no longer declares.
+    prefix = f"{entry.entry_id}_"
+    expected = (
+        {f"{prefix}{button}" for button in definition.button_ids}
+        | {f"{prefix}switch_{switch['id']}" for switch in definition.switches}
+        | ({f"{prefix}media_player"} if definition.media_player else set())
+    )
+    registry = er.async_get(hass)
+    for entity in er.async_entries_for_config_entry(registry, entry.entry_id):
+        if entity.unique_id not in expected:
+            registry.async_remove(entity.entity_id)
     entry.async_on_unload(entry.add_update_listener(_async_update_listener))
     return True
 
