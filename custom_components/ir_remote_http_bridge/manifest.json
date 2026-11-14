@@ -1,0 +1,13 @@
+{
+  "domain": "ir_remote_http_bridge",
+  "name": "IR Remote HTTP Bridge",
+  "codeowners": ["@acidcoke"],
+  "config_flow": true,
+  "dependencies": ["http", "frontend", "websocket_api"],
+  "documentation": "https://github.com/acidcoke/ha-ir-remote-http-bridge",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/acidcoke/ha-ir-remote-http-bridge/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

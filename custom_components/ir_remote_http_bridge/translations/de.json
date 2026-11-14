@@ -1,0 +1,78 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Hubitat Maker API",
+        "description": "Füge eine beliebige URL aus der Maker-API-App in Hubitat ein (z. B. den Link „Get All Devices“). Enthält die URL bereits `access_token=...`, kann das Token-Feld leer bleiben. Der IR-Blaster muss in der Maker-API-App ausgewählt sein.",
+        "data": {
+          "url": "Maker-API-URL",
+          "access_token": "Access-Token"
+        },
+        "data_description": {
+          "url": "z. B. http://192.168.1.10/apps/api/38/devices?access_token=..."
+        }
+      },
+      "device": {
+        "title": "IR-Blaster",
+        "description": "Wähle das Gerät mit dem Treiber „Tuya Zigbee IR Remote Control“.",
+        "data": {
+          "device_id": "Gerät"
+        }
+      },
+      "remote": {
+        "title": "Fernbedienung",
+        "description": "Wähle das Fernbedienungs-Layout, das über **{device}** gesendet wird. Eigene Layouts (JSON + SVG) gehören in den Ordner `ir_remote_http_bridge` im Home-Assistant-Konfigurationsverzeichnis.",
+        "data": {
+          "definition": "Fernbedienungs-Layout",
+          "name": "Name"
+        },
+        "data_description": {
+          "name": "Wird als Gerätename und Kartentitel angezeigt. Leer: Name des Layouts."
+        }
+      },
+      "reconfigure": {
+        "title": "Verbindung ändern",
+        "description": "Gelernte Codes bleiben erhalten.",
+        "data": {
+          "url": "Maker-API-URL",
+          "access_token": "Access-Token",
+          "device_id": "Hubitat-Geräte-ID des IR-Blasters"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Das ist keine Maker-API-URL (erwartet: .../apps/api/<Nummer>).",
+      "token_required": "Gib das Access-Token ein oder füge eine URL ein, die es enthält.",
+      "invalid_auth": "Die Maker API hat das Access-Token abgelehnt.",
+      "cannot_connect": "Die Maker API ist nicht erreichbar.",
+      "no_devices": "Die Maker-API-App gibt keine Geräte frei. Wähle den IR-Blaster zuerst in der Maker-API-App aus.",
+      "unknown_device": "Die Maker-API-App gibt kein Gerät mit dieser ID frei."
+    },
+    "abort": {
+      "no_definitions": "Keine Fernbedienungs-Layouts gefunden.",
+      "reconfigure_successful": "Verbindung aktualisiert."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "send_mode": "Codes senden",
+          "learn_timeout": "Lern-Timeout"
+        },
+        "data_description": {
+          "send_mode": "„Per Name“ lässt den Hubitat-Treiber den Code nachschlagen, den er beim Lernen gespeichert hat. „Rohcode“ sendet den in Home Assistant gespeicherten Code.",
+          "learn_timeout": "Wie lange auf einen Tastendruck der Originalfernbedienung gewartet wird."
+        }
+      }
+    }
+  },
+  "selector": {
+    "send_mode": {
+      "options": {
+        "name": "Per Name (Code im Hubitat-Treiber gespeichert)",
+        "code": "Rohcode (in Home Assistant gespeichert)"
+      }
+    }
+  }
+}

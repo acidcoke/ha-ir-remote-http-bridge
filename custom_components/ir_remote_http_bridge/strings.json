@@ -1,0 +1,78 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Hubitat Maker API",
+        "description": "Paste any URL from the Maker API app in Hubitat (for example the \"Get All Devices\" link). If the URL already contains `access_token=...`, the token field can stay empty. The IR blaster must be selected in the Maker API app.",
+        "data": {
+          "url": "Maker API URL",
+          "access_token": "Access token"
+        },
+        "data_description": {
+          "url": "e.g. http://192.168.1.10/apps/api/38/devices?access_token=..."
+        }
+      },
+      "device": {
+        "title": "IR blaster",
+        "description": "Choose the device that uses the \"Tuya Zigbee IR Remote Control\" driver.",
+        "data": {
+          "device_id": "Device"
+        }
+      },
+      "remote": {
+        "title": "Remote control",
+        "description": "Choose the remote layout that is sent through **{device}**. Own layouts (JSON + SVG) go into the folder `ir_remote_http_bridge` in the Home Assistant config directory.",
+        "data": {
+          "definition": "Remote layout",
+          "name": "Name"
+        },
+        "data_description": {
+          "name": "Shown as device name and card title. Empty: name of the layout."
+        }
+      },
+      "reconfigure": {
+        "title": "Change connection",
+        "description": "Learned codes are kept.",
+        "data": {
+          "url": "Maker API URL",
+          "access_token": "Access token",
+          "device_id": "Hubitat device ID of the IR blaster"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "This is not a Maker API URL (expected .../apps/api/<number>).",
+      "token_required": "Enter the access token or paste a URL that contains it.",
+      "invalid_auth": "The Maker API rejected the access token.",
+      "cannot_connect": "Cannot reach the Maker API.",
+      "no_devices": "The Maker API app does not expose any devices. Select the IR blaster in the Maker API app first.",
+      "unknown_device": "The Maker API app does not expose a device with this ID."
+    },
+    "abort": {
+      "no_definitions": "No remote layouts found.",
+      "reconfigure_successful": "Connection updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "send_mode": "Send codes",
+          "learn_timeout": "Learn timeout"
+        },
+        "data_description": {
+          "send_mode": "\"By name\" lets the Hubitat driver look up the code it stored while learning. \"Raw code\" sends the code stored in Home Assistant.",
+          "learn_timeout": "How long to wait for a key press on the original remote."
+        }
+      }
+    }
+  },
+  "selector": {
+    "send_mode": {
+      "options": {
+        "name": "By name (code stored in the Hubitat driver)",
+        "code": "Raw code (stored in Home Assistant)"
+      }
+    }
+  }
+}

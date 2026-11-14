@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 440" font-family="Arial, Helvetica, sans-serif" text-anchor="middle">
+  <defs>
+    <linearGradient id="fr19-body" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5b5e60"/>
+      <stop offset="0.5" stop-color="#707375"/>
+      <stop offset="1" stop-color="#5b5e60"/>
+    </linearGradient>
+  </defs>
+
+  <!-- body -->
+  <rect x="4" y="4" width="202" height="432" rx="36" fill="#1d1d1f"/>
+  <rect x="9" y="9" width="192" height="422" rx="32" fill="url(#fr19-body)"/>
+
+  <!-- DISPLAY pill -->
+  <rect x="22" y="28" width="112" height="42" rx="21" fill="#8b8e90"/>
+  <text x="78" y="66" font-size="7" fill="#fff" pointer-events="none">DISPLAY</text>
+  <g data-button="display_single">
+    <title>Display: Single</title>
+    <rect x="22" y="28" width="54" height="42" rx="21" fill="transparent"/>
+    <rect x="35" y="36" width="26" height="18" rx="2" fill="none" stroke="#fff" stroke-width="2"/>
+  </g>
+  <g data-button="display_pbp">
+    <title>Display: Picture by Picture</title>
+    <rect x="80" y="28" width="54" height="42" rx="21" fill="transparent"/>
+    <rect x="95" y="36" width="26" height="18" rx="2" fill="none" stroke="#fff" stroke-width="2"/>
+    <path d="M108 36v18M108 45h13" fill="none" stroke="#fff" stroke-width="2"/>
+  </g>
+
+  <g data-button="power_on">
+    <title>On</title>
+    <circle cx="166" cy="49" r="20" fill="#e8174f"/>
+    <text x="166" y="53.5" font-size="12" fill="#fff">ON</text>
+  </g>
+
+  <!-- SELECT pill -->
+  <rect x="22" y="84" width="112" height="42" rx="21" fill="#8b8e90"/>
+  <text x="78" y="122" font-size="7" fill="#fff" pointer-events="none">SELECT</text>
+  <g data-button="select_sound">
+    <title>Select: Sound</title>
+    <rect x="22" y="84" width="54" height="42" rx="21" fill="transparent"/>
+    <path d="M37 97h5l7-6v20l-7-6h-5z" fill="#fff"/>
+    <path d="M53 96a7 7 0 0 1 0 10M56 92.500a12 12 0 0 1 0 17" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+  </g>
+  <g data-button="select_usb">
+    <title>Select: USB</title>
+    <rect x="80" y="84" width="54" height="42" rx="21" fill="transparent"/>
+    <rect x="103" y="94" width="18" height="13" rx="2" fill="#fff"/>
+    <rect x="96" y="96.5" width="8" height="8" fill="#fff"/>
+    <path d="M98.5 99h3M98.5 102h3" stroke="#8b8e90" stroke-width="1.2"/>
+  </g>
+
+  <g data-button="power_off">
+    <title>Off</title>
+    <circle cx="166" cy="105" r="20" fill="#f4f4f4"/>
+    <text x="166" y="109.5" font-size="12" fill="#e8174f">OFF</text>
+  </g>
+
+  <g data-button="return">
+    <title>Return</title>
+    <circle cx="44" cy="158" r="19" fill="#63666a" stroke="#fff" stroke-width="2"/>
+    <text x="44" y="160.5" font-size="7" fill="#fff">RETURN</text>
+  </g>
+  <g data-button="menu">
+    <title>Menu</title>
+    <circle cx="166" cy="158" r="19" fill="#63666a" stroke="#fff" stroke-width="2"/>
+    <text x="166" y="161" font-size="8.5" fill="#fff">MENU</text>
+  </g>
+
+  <!-- navigation ring -->
+  <circle cx="105" cy="254" r="80" fill="none" stroke="#fff" stroke-width="1.2"/>
+  <g data-button="up">
+    <title>Up / Vol+ / 1</title>
+    <text x="105" y="190" font-size="8" fill="#fff">VOL+</text>
+    <circle cx="105" cy="210" r="16" fill="#505356"/>
+    <path d="M96 208l9-8 9 8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="105" y="221" font-size="8" fill="#fff">1</text>
+  </g>
+  <g data-button="down">
+    <title>Down / Vol- / 3</title>
+    <text x="105" y="326" font-size="8" fill="#fff">VOL−</text>
+    <circle cx="105" cy="298" r="16" fill="#505356"/>
+    <path d="M96 300l9 8 9-8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="105" y="296" font-size="8" fill="#fff">3</text>
+  </g>
+  <g data-button="left">
+    <title>Left / Bright- / 4</title>
+    <text x="60" y="282" font-size="8" fill="#fff">BRIGHT−</text>
+    <circle cx="59" cy="254" r="16" fill="#505356"/>
+    <path d="M57 245l-8 9 8 9" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="64" y="257" font-size="8" fill="#fff">4</text>
+  </g>
+  <g data-button="right">
+    <title>Right / Bright+ / 2</title>
+    <text x="150" y="282" font-size="8" fill="#fff">BRIGHT+</text>
+    <circle cx="151" cy="254" r="16" fill="#505356"/>
+    <path d="M153 245l8 9-8 9" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="146" y="257" font-size="8" fill="#fff">2</text>
+  </g>
+  <g data-button="enter">
+    <title>Enter</title>
+    <circle cx="105" cy="254" r="17" fill="#63666a" stroke="#fff" stroke-width="2"/>
+    <text x="105" y="257" font-size="8" fill="#fff">ENTER</text>
+  </g>
+
+  <g data-button="eco">
+    <title>Eco</title>
+    <circle cx="44" cy="356" r="19" fill="#505356" stroke="#fff" stroke-width="2"/>
+    <path d="M35 364c-1-12 7-18 19-17 1 12-6 19-19 17z" fill="#fff"/>
+    <path d="M36 363l12-11" fill="none" stroke="#505356" stroke-width="1.4" stroke-linecap="round"/>
+  </g>
+  <g data-button="pairing">
+    <title>Pairing</title>
+    <circle cx="166" cy="356" r="19" fill="#9a9da0"/>
+    <text x="166" y="358.5" font-size="7" fill="#fff">PAIRING</text>
+  </g>
+
+  <text x="105" y="398" font-size="6" fill="#e6e6e6" pointer-events="none">REMOTE CONTROLLER FR-19</text>
+  <text x="105" y="421" font-size="17" font-weight="bold" letter-spacing="1" fill="#fff" pointer-events="none">EIZO</text>
+</svg>

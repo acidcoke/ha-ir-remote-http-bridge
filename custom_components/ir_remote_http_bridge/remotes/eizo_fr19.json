@@ -1,0 +1,23 @@
+{
+  "id": "eizo_fr19",
+  "name": "EIZO FR-19",
+  "manufacturer": "EIZO",
+  "model": "FR-19",
+  "buttons": [
+    { "id": "display_single", "name": "Display: Single", "icon": "mdi:monitor" },
+    { "id": "display_pbp", "name": "Display: Picture by Picture", "icon": "mdi:view-split-vertical" },
+    { "id": "power_on", "name": "On", "icon": "mdi:power-on" },
+    { "id": "select_sound", "name": "Select: Sound", "icon": "mdi:volume-high" },
+    { "id": "select_usb", "name": "Select: USB", "icon": "mdi:usb" },
+    { "id": "power_off", "name": "Off", "icon": "mdi:power-off" },
+    { "id": "return", "name": "Return", "icon": "mdi:keyboard-return" },
+    { "id": "menu", "name": "Menu", "icon": "mdi:menu" },
+    { "id": "up", "name": "Up / Vol+ / 1", "icon": "mdi:chevron-up" },
+    { "id": "right", "name": "Right / Bright+ / 2", "icon": "mdi:chevron-right" },
+    { "id": "down", "name": "Down / Vol- / 3", "icon": "mdi:chevron-down" },
+    { "id": "left", "name": "Left / Bright- / 4", "icon": "mdi:chevron-left" },
+    { "id": "enter", "name": "Enter", "icon": "mdi:check" },
+    { "id": "eco", "name": "Eco", "icon": "mdi:leaf" },
+    { "id": "pairing", "name": "Pairing", "icon": "mdi:link-variant" }
+  ]
+}
