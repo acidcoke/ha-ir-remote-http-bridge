@@ -24,6 +24,7 @@ from .const import (
     DEFAULT_SEND_MODE,
     DOMAIN,
     LEARN_POLL_INTERVAL,
+    SEND_GAP,
     SEND_MODE_CODE,
 )
 from .definitions import RemoteDefinition
@@ -78,8 +79,11 @@ class RemoteBridge:
         # A blaster can only learn one code at a time, no matter how many
         # remotes share it.
         locks = hass.data.setdefault(DOMAIN, {}).setdefault("locks", {})
-        self._lock: asyncio.Lock = locks.setdefault(
-            (entry.data[CONF_BASE_URL], self.device_id), asyncio.Lock()
+        key = (entry.data[CONF_BASE_URL], self.device_id)
+        self._lock: asyncio.Lock = locks.setdefault(key, asyncio.Lock())
+        # Transmissions of one blaster are sent one after the other.
+        self._send_lock: asyncio.Lock = locks.setdefault(
+            (*key, "send"), asyncio.Lock()
         )
 
     @property
@@ -169,7 +173,9 @@ class RemoteBridge:
             raise BridgeBusy("The IR blaster is currently learning a code")
         mode = self.entry.options.get(CONF_SEND_MODE, DEFAULT_SEND_MODE)
         value = code if mode == SEND_MODE_CODE else self.code_name(button_id)
-        await self.client.async_command(self.device_id, "sendCode", value)
+        async with self._send_lock:
+            await self.client.async_command(self.device_id, "sendCode", value)
+            await asyncio.sleep(SEND_GAP)
 
     async def async_forget(self, button_id: str) -> None:
         """Delete the code of a button."""

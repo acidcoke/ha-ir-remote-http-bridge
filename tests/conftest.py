@@ -61,5 +61,6 @@ def hub():
     with (
         patch("custom_components.ir_remote_http_bridge.api.MakerApiClient._get", _get),
         patch("custom_components.ir_remote_http_bridge.bridge.LEARN_POLL_INTERVAL", 0),
+        patch("custom_components.ir_remote_http_bridge.bridge.SEND_GAP", 0),
     ):
         yield fake

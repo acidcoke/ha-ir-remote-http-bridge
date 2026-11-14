@@ -19,5 +19,13 @@
     { "id": "enter", "name": "Enter", "icon": "mdi:check" },
     { "id": "eco", "name": "Eco", "icon": "mdi:leaf" },
     { "id": "pairing", "name": "Pairing", "icon": "mdi:link-variant" }
-  ]
+  ],
+  "media_player": {
+    "device_class": "tv",
+    "icon": "mdi:monitor",
+    "on": "power_on",
+    "off": "power_off",
+    "volume_up": "up",
+    "volume_down": "down"
+  }
 }

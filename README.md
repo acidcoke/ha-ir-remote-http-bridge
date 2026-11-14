@@ -9,7 +9,7 @@ angesprochen über die **Maker API**.
 - **Lernmodus** in der Karte: Taste antippen → der Blaster wartet auf das Signal der Originalfernbedienung →
   Home Assistant speichert den Code bei dieser Taste.
 - **Normalmodus**: Taste antippen → Code wird gesendet.
-- Zusätzlich gibt es pro Taste eine `button`-Entität für Automationen und Skripte.
+- Zusätzlich gibt es pro Taste eine `button`-Entität sowie Mediaplayer bzw. Schalter – für Automationen, Skripte und Alexa.
 - Eigene Fernbedienungen lassen sich mit einer **SVG-Datei + JSON-Definition** hinzufügen.
 
 Mitgeliefert: **EIZO FR-19** und eine **Kamin-/Heizlüfter-Fernbedienung**.
@@ -43,7 +43,8 @@ Nach dem Hinzufügen einer Fernbedienung die Seite einmal neu laden. Danach ersc
 ```yaml
 type: custom:ir-remote-card-monitor   # „monitor“ = Name der Fernbedienung als Slug
 title: Monitor                        # optional
-max_width: 280                        # optional, Breite der Zeichnung in px
+max_height: 650                       # optional, maximale Höhe der Zeichnung in px
+max_width: 300                        # optional, zusätzlich maximale Breite in px
 allow_learning: true                  # optional, false blendet den Lernmodus aus
 ```
 
@@ -51,6 +52,46 @@ allow_learning: true                  # optional, false blendet den Lernmodus au
 die Originalfernbedienung auf den Blaster richten und die Taste drücken. Bei bereits gelernten Tasten wird
 nachgefragt (Neu lernen / Testen / Löschen). Mit „Fertig“ zurück in den Normalmodus. Der Lernmodus ist nur
 für Administratoren sichtbar.
+
+## Alexa und andere Sprachassistenten
+
+Die Integration legt Entitäten an, die du wie alle anderen für Alexa freigibst
+(Home Assistant Cloud: Einstellungen → Sprachassistenten → Alexa → Entitäten freigeben; bei der manuellen
+Alexa-Skill-Einrichtung über `alexa: smart_home: filter:`). Danach in der Alexa-App „Geräte suchen“.
+
+- **Mediaplayer** (`media_player.<name>`, z. B. beim EIZO FR-19): benannt wie die Fernbedienung –
+  „Alexa, schalte *Monitor* ein“, „Alexa, mach *Monitor* lauter / leiser“, „… um 3 lauter“.
+  Jeder Schritt sendet einmal die Lauter- bzw. Leiser-Taste.
+- **Schalter** (`switch.<name>`, z. B. beim Kamin): Ein/Aus – „Alexa, schalte *Kamin* ein“.
+- **Tasten** (`button.<name>_<taste>`): Jede Taste erscheint in Alexa als Szene –
+  „Alexa, aktiviere *Monitor Menu*“. Für angenehmere Sprachbefehle der Entität in Home Assistant einen
+  anderen Namen geben oder die Taste in einer Alexa-Routine verwenden (z. B. Routine „Monitor heller“ →
+  Szene *Monitor Right*).
+
+Die Entitäten sind verfügbar, sobald die zugehörigen Tasten gelernt sind.
+
+Infrarot kennt keinen Rückkanal: Der Ein/Aus-Zustand ist nur der zuletzt gesendete Befehl. Bei Fernbedienungen
+mit einer einzigen Power-Taste (Umschalter, z. B. der Kamin) sendet „ein“ und „aus“ dieselbe Taste – wurde das
+Gerät zwischendurch mit der Originalfernbedienung geschaltet, ist der Zustand vertauscht.
+
+Beides wird in der JSON-Definition festgelegt; alle Werte sind Tasten-IDs:
+
+```json
+"media_player": {
+  "device_class": "tv",
+  "on": "power_on",
+  "off": "power_off",
+  "volume_up": "up",
+  "volume_down": "down",
+  "mute": "mute"
+},
+"switches": [
+  { "id": "light", "name": "Light", "on": "light", "off": "light" }
+]
+```
+
+`media_player`: `device_class` ist `tv`, `speaker` oder `receiver`; `on`/`off`, `volume_up`/`volume_down`
+und `mute` sind jeweils optional. `switches`: ohne `name` heißt der Schalter wie die Fernbedienung.
 
 ## Eigene Fernbedienungen
 
