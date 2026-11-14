@@ -40,6 +40,19 @@ DEFINITION_SCHEMA = vol.Schema(
             ],
             vol.Length(min=1),
         ),
+        # On/off entities for voice assistants. "on" and "off" are button ids;
+        # use the same id twice for a remote with a single power toggle key.
+        vol.Optional("switches", default=list): [
+            vol.Schema(
+                {
+                    vol.Required("id"): _ID,
+                    vol.Optional("name"): str,
+                    vol.Optional("icon"): str,
+                    vol.Required("on"): _ID,
+                    vol.Required("off"): _ID,
+                }
+            )
+        ],
     }
 )
 
@@ -53,6 +66,7 @@ class RemoteDefinition:
     manufacturer: str | None
     model: str | None
     buttons: tuple[dict[str, Any], ...]
+    switches: tuple[dict[str, Any], ...]
     svg: str
     builtin: bool
 
@@ -78,6 +92,16 @@ def _load_file(json_path: Path, builtin: bool) -> RemoteDefinition:
     if len(set(button_ids)) != len(button_ids):
         raise ValueError("duplicate button ids")
 
+    switch_ids = [switch["id"] for switch in data["switches"]]
+    if len(set(switch_ids)) != len(switch_ids):
+        raise ValueError("duplicate switch ids")
+    for switch in data["switches"]:
+        for key in ("on", "off"):
+            if switch[key] not in button_ids:
+                raise ValueError(
+                    f"switch '{switch['id']}' refers to unknown button '{switch[key]}'"
+                )
+
     svg_path = (json_path.parent / data.get("svg", f"{json_path.stem}.svg")).resolve()
     if json_path.parent.resolve() not in svg_path.parents:
         raise ValueError("the SVG file must be in the same folder as the JSON file")
@@ -100,6 +124,7 @@ def _load_file(json_path: Path, builtin: bool) -> RemoteDefinition:
         manufacturer=data.get("manufacturer"),
         model=data.get("model"),
         buttons=tuple(data["buttons"]),
+        switches=tuple(data["switches"]),
         svg=svg,
         builtin=builtin,
     )

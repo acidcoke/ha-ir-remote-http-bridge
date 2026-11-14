@@ -222,3 +222,35 @@ async def test_remove_entry(hass: HomeAssistant, hub):
     await entry.runtime_data.async_learn("menu")
     assert await hass.config_entries.async_remove(entry.entry_id)
     await hass.async_block_till_done()
+
+
+async def test_switch(hass: HomeAssistant, hub):
+    entry = await _setup(hass)
+    bridge = entry.runtime_data
+    # named like the remote, unavailable until both keys are learned
+    assert hass.states.get("switch.monitor").state == "unavailable"
+    await bridge.async_learn("power_on")
+    hub.code_on_learn = "T2Zm"
+    await bridge.async_learn("power_off")
+    await hass.async_block_till_done()
+    assert hass.states.get("switch.monitor").state == "off"
+
+    await hass.services.async_call(
+        "switch", "turn_on", {"entity_id": "switch.monitor"}, blocking=True
+    )
+    assert hub.commands[-1] == ("42", "sendCode", bridge.code_name("power_on"))
+    assert hass.states.get("switch.monitor").state == "on"
+    await hass.services.async_call(
+        "switch", "turn_off", {"entity_id": "switch.monitor"}, blocking=True
+    )
+    assert hub.commands[-1] == ("42", "sendCode", bridge.code_name("power_off"))
+    assert hass.states.get("switch.monitor").state == "off"
+
+
+def test_switch_unknown_button(tmp_path):
+    (tmp_path / "tv.json").write_text(
+        '{"name": "TV", "buttons": [{"id": "power", "name": "Power"}],'
+        ' "switches": [{"id": "power", "on": "power", "off": "nope"}]}'
+    )
+    (tmp_path / "tv.svg").write_text('<svg><rect data-button="power"/></svg>')
+    assert "tv" not in load_definitions(tmp_path)

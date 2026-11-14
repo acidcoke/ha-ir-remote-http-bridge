@@ -3,7 +3,7 @@
 from homeassistant.const import Platform
 
 DOMAIN = "ir_remote_http_bridge"
-PLATFORMS = [Platform.BUTTON]
+PLATFORMS = [Platform.BUTTON, Platform.SWITCH]
 
 CONF_BASE_URL = "base_url"
 CONF_ACCESS_TOKEN = "access_token"

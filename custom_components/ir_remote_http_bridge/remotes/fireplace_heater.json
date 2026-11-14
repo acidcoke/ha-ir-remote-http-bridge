@@ -13,5 +13,9 @@
     { "id": "temperature", "name": "Temperature", "icon": "mdi:thermometer-lines" },
     { "id": "dimmer", "name": "Light brightness", "icon": "mdi:brightness-6" },
     { "id": "light", "name": "Light", "icon": "mdi:lightbulb-on-outline" }
+  ],
+  "switches": [
+    { "id": "power", "icon": "mdi:fireplace", "on": "power", "off": "power" },
+    { "id": "light", "name": "Light", "icon": "mdi:lightbulb", "on": "light", "off": "light" }
   ]
 }
