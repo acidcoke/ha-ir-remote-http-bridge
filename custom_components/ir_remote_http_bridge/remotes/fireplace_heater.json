@@ -5,7 +5,7 @@
     { "id": "power", "name": "Power", "icon": "mdi:power" },
     { "id": "timer", "name": "Timer", "icon": "mdi:clock-outline" },
     { "id": "mode", "name": "Mode", "icon": "mdi:alpha-m-circle-outline" },
-    { "id": "fan_mode", "name": "Fan mode", "icon": "mdi:fan-auto" },
+    { "id": "fan_mode", "name": "Oscillation", "icon": "mdi:arrow-oscillating" },
     { "id": "plus", "name": "Plus", "icon": "mdi:plus" },
     { "id": "minus", "name": "Minus", "icon": "mdi:minus" },
     { "id": "fan", "name": "Fan", "icon": "mdi:fan" },
@@ -16,6 +16,7 @@
   ],
   "switches": [
     { "id": "power", "icon": "mdi:fireplace", "on": "power", "off": "power" },
+    { "id": "oscillation", "name": "Oscillation", "icon": "mdi:arrow-oscillating", "on": "fan_mode", "off": "fan_mode" },
     { "id": "light", "name": "Light", "icon": "mdi:lightbulb", "on": "light", "off": "light" }
   ]
 }

@@ -32,7 +32,7 @@
     <text x="42" y="105" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-weight="bold" font-size="19" fill="#e8e8e8" stroke="none">M</text>
   </g>
   <g data-button="fan_mode">
-    <title>Fan mode</title>
+    <title>Oscillation</title>
     <circle cx="138" cy="98" r="16" fill="#1b1b1e" stroke="#d8d8d8" stroke-width="1.8"/>
     <circle cx="138" cy="98" r="9.5" stroke="#e8e8e8" stroke-width="1.4"/>
     <g fill="#e8e8e8" stroke="none">
